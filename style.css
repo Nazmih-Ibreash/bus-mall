@@ -1,0 +1,68 @@
+body{
+    max-width: 100%;
+    overflow-x: hidden;
+    background-color: beige;
+    
+}
+header{
+    background-color: #194350;
+    color: #ffc2b4;
+    height: 80px;
+    margin-bottom: 15px;
+}
+h1{
+    text-align: center;
+    font-family: 'Josefin Sans', sans-serif;
+    padding-top: 15px;
+}
+
+main div{
+    display: inline-block;
+    
+    margin: 5px;
+    position: relative;
+    left: 170px;
+}
+#first {
+    height: 300px;
+    width: 300px;
+    float: left;
+    border: solid 2px #ff8882;
+    
+}
+#second{
+    height: 300px;
+    width: 300px;
+    position: relative;
+    bottom: 5px;
+    border: solid 2px #ff8882;
+}
+#last{
+    height: 300px;
+    width: 300px;
+    float: right;
+    border: solid 2px #ff8882;
+}
+section{
+    clear: both;
+    border: solid 1px #ff8882;
+    margin-top: 30px;
+    margin-left: 120px;
+    margin-right: 120px;
+    font-family: 'Josefin Sans', sans-serif;
+    color: #194350;
+    
+}
+
+section button{
+    height: 50px;
+    width: 200px;
+    color: #194350;
+    background-color: #ff8882;
+    font-size: 30px;
+}
+section ul li{
+    margin: 10px;
+    font-size: larger;
+}
+
