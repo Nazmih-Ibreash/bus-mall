@@ -9,6 +9,11 @@ let products = [];
 let oldArrIndex = [];
 let newArrIndex = [];
 
+let productsName = [];
+let productsVotes = [];
+let productsSeen = [];
+
+
 
 function FavProduct(name, imgPath) {
     this.name = name;
@@ -17,6 +22,10 @@ function FavProduct(name, imgPath) {
     this.numOfImgClicks = 0;
 
     products.push(this);
+    productsName.push(this.name);
+
+
+
 }
 
 
@@ -62,7 +71,7 @@ function generateRandomImgs() {
     secondImgIndex = genearateIndex();
     lastImgIndex = genearateIndex();
 
-    while (firstImgIndex === secondImgIndex || secondImgIndex === lastImgIndex || firstImgIndex === lastImgIndex ) {
+    while (firstImgIndex === secondImgIndex || secondImgIndex === lastImgIndex || firstImgIndex === lastImgIndex) {
         firstImgIndex = genearateIndex();
         secondImgIndex = genearateIndex();
         lastImgIndex = genearateIndex();
@@ -81,7 +90,7 @@ function generateRandomImgs() {
     secondDiv.src = products[secondImgIndex].imgPath;
     lastDiv.src = products[lastImgIndex].imgPath;
 
-    
+
     //console.log('new in generate ' + newArrIndex);
 
 }
@@ -159,9 +168,59 @@ function clickEvent(event) {
             }
             resButton.removeEventListener('click', viewResults);
         }
+        for (let i = 0; i < products.length; i++) {
+            productsVotes.push(products[i].numOfImgClicks);
+            productsSeen.push(products[i].numOfTimesImgSeen);
+
+        }
+
+        chart();
+
         firstDiv.removeEventListener('click', clickEvent);
         secondDiv.removeEventListener('click', clickEvent);
         lastDiv.removeEventListener('click', clickEvent);
     }
+
+}
+
+
+// chart.js
+function chart() {
+    let ctx = document.getElementById('myChart').getContext('2d');
+
+    let chart = new Chart(ctx, {
+        // what type is the chart
+        type: 'bar',
+
+        //  the data for showing
+        data: {
+            //  for the names
+            labels: productsName,
+
+            datasets: [
+                {
+                    label: 'Fav Products Votes',
+                    data: productsVotes,
+                    backgroundColor: [
+                        '#ff8882',
+                    ],
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'Products Shown',
+                    data: productsSeen,
+                    backgroundColor: [
+                        '#194350',
+                    ],
+
+                    borderWidth: 1
+                }
+
+            ]
+        },
+        options: {}
+    });
 
 }
