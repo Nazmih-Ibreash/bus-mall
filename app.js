@@ -125,6 +125,7 @@ function clickEvent(event) {
                 resultList.appendChild(listItems);
                 listItems.textContent = `${products[i].name} had ${products[i].numOfImgClicks} votes, and was seen ${products[i].numOfTimesImgSeen} times.`;
             }
+            resButton.removeEventListener('click', viewResults);
         }
         firstDiv.removeEventListener('click',clickEvent);
         secondDiv.removeEventListener('click',clickEvent);
