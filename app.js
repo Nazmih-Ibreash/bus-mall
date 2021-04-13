@@ -6,6 +6,7 @@ let lastImgIndex = 0;
 
 
 let products = [];
+let arrIndex = [];
 
 function FavProduct(name, imgPath) {
     this.name = name;
@@ -80,7 +81,7 @@ function generateRandomImgs() {
 }
 
 generateRandomImgs();
-
+arrIndex.includes(firstImgIndex, secondImgIndex, lastImgIndex);
 
 let attempts = 25;
 let userClicks = 0;
@@ -89,8 +90,13 @@ firstDiv.addEventListener('click', clickEvent);
 secondDiv.addEventListener('click', clickEvent);
 lastDiv.addEventListener('click', clickEvent);
 
+
 function clickEvent(event) {
     console.log(event.target.id);
+
+    while (arrIndex.includes(firstImgIndex, secondImgIndex, lastImgIndex)) {
+        generateRandomImgs();
+    }
 
     products[firstImgIndex].numOfTimesImgSeen++;
     products[secondImgIndex].numOfTimesImgSeen++;
@@ -106,6 +112,8 @@ function clickEvent(event) {
         } else {
             products[lastImgIndex].numOfImgClicks++;
         }
+        arrIndex.length=0;
+        arrIndex.push(firstImgIndex, secondImgIndex, lastImgIndex);
         generateRandomImgs();
     }
     else {
@@ -126,9 +134,9 @@ function clickEvent(event) {
                 listItems.textContent = `${products[i].name} had ${products[i].numOfImgClicks} votes, and was seen ${products[i].numOfTimesImgSeen} times.`;
             }
         }
-        firstDiv.removeEventListener('click',clickEvent);
-        secondDiv.removeEventListener('click',clickEvent);
-        lastDiv.removeEventListener('click',clickEvent);
+        firstDiv.removeEventListener('click', clickEvent);
+        secondDiv.removeEventListener('click', clickEvent);
+        lastDiv.removeEventListener('click', clickEvent);
     }
 
 }
