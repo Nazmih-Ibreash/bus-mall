@@ -6,6 +6,14 @@ let lastImgIndex = 0;
 
 
 let products = [];
+let oldArrIndex = [];
+let newArrIndex = [];
+
+let productsName = [];
+let productsVotes = [];
+let productsSeen = [];
+
+
 
 function FavProduct(name, imgPath) {
     this.name = name;
@@ -14,6 +22,10 @@ function FavProduct(name, imgPath) {
     this.numOfImgClicks = 0;
 
     products.push(this);
+    productsName.push(this.name);
+
+
+
 }
 
 
@@ -46,22 +58,13 @@ function genearateIndex() {
     return Math.floor(Math.random() * products.length);
 }
 
-// console.log(firstImgIndex);
-// console.log(secondImgIndex);
-// console.log(lastImgIndex);
-
 let firstDiv = document.getElementById("first");
 let secondDiv = document.getElementById("second");
 let lastDiv = document.getElementById("last");
 
-
 console.log(firstDiv);
 console.log(secondDiv);
 console.log(lastDiv);
-
-
-//firstDiv.src = products[firstImgIndex].imgPath;
-//let firstPic = firstDiv.appendchild('img');
 
 function generateRandomImgs() {
     firstImgIndex = genearateIndex();
@@ -73,25 +76,57 @@ function generateRandomImgs() {
         secondImgIndex = genearateIndex();
         lastImgIndex = genearateIndex();
     }
+    newArrIndex.push(firstImgIndex);
+    newArrIndex.push(secondImgIndex);
+    newArrIndex.push(lastImgIndex);
+
+    while (oldArrIndex.includes(newArrIndex[0]) || oldArrIndex.includes(newArrIndex[1]) || oldArrIndex.includes(newArrIndex[2])) {
+        newArrIndex.length = 0;
+        generateRandomImgs();
+        console.log('new in check ' + newArrIndex);
+    }
 
     firstDiv.src = products[firstImgIndex].imgPath;
     secondDiv.src = products[secondImgIndex].imgPath;
     lastDiv.src = products[lastImgIndex].imgPath;
+
+
+    //console.log('new in generate ' + newArrIndex);
+
 }
 
 generateRandomImgs();
-
-
+oldArrIndex.push(firstImgIndex);
+oldArrIndex.push(secondImgIndex);
+oldArrIndex.push(lastImgIndex);
+console.log('old  ' + oldArrIndex);
+//console.log('new  '+ newArrIndex);
 let attempts = 25;
 let userClicks = 0;
+
+// function checkIndex() {
+//     while (oldArrIndex.includes(newArrIndex[0], newArrIndex[1], newArrIndex[2])) {
+//         newArrIndex.length = 0;
+//         generateRandomImgs();
+//         console.log('new in check ' + newArrIndex);
+//     }
+// }
 
 firstDiv.addEventListener('click', clickEvent);
 secondDiv.addEventListener('click', clickEvent);
 lastDiv.addEventListener('click', clickEvent);
 
+
+
 function clickEvent(event) {
     console.log(event.target.id);
+    console.log(newArrIndex);
 
+    // while (oldArrIndex.includes(newArrIndex[0]) || oldArrIndex.includes(newArrIndex[1]) || oldArrIndex.includes(newArrIndex[2])) {
+    //     newArrIndex.length = 0;
+    //     generateRandomImgs();
+    //     console.log('new in check ' + newArrIndex);
+    // }
     products[firstImgIndex].numOfTimesImgSeen++;
     products[secondImgIndex].numOfTimesImgSeen++;
     products[lastImgIndex].numOfTimesImgSeen++;
@@ -106,6 +141,12 @@ function clickEvent(event) {
         } else {
             products[lastImgIndex].numOfImgClicks++;
         }
+        oldArrIndex.length = 0;
+        //oldArrIndex=newArrIndex;
+        oldArrIndex.push(firstImgIndex);
+        oldArrIndex.push(secondImgIndex);
+        oldArrIndex.push(lastImgIndex);
+
         generateRandomImgs();
     }
     else {
@@ -127,9 +168,59 @@ function clickEvent(event) {
             }
             resButton.removeEventListener('click', viewResults);
         }
-        firstDiv.removeEventListener('click',clickEvent);
-        secondDiv.removeEventListener('click',clickEvent);
-        lastDiv.removeEventListener('click',clickEvent);
+        for (let i = 0; i < products.length; i++) {
+            productsVotes.push(products[i].numOfImgClicks);
+            productsSeen.push(products[i].numOfTimesImgSeen);
+
+        }
+
+        chart();
+
+        firstDiv.removeEventListener('click', clickEvent);
+        secondDiv.removeEventListener('click', clickEvent);
+        lastDiv.removeEventListener('click', clickEvent);
     }
+
+}
+
+
+// chart.js
+function chart() {
+    let ctx = document.getElementById('myChart').getContext('2d');
+
+    let chart = new Chart(ctx, {
+        // what type is the chart
+        type: 'bar',
+
+        //  the data for showing
+        data: {
+            //  for the names
+            labels: productsName,
+
+            datasets: [
+                {
+                    label: 'Fav Products Votes',
+                    data: productsVotes,
+                    backgroundColor: [
+                        '#ff8882',
+                    ],
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'Products Shown',
+                    data: productsSeen,
+                    backgroundColor: [
+                        '#194350',
+                    ],
+
+                    borderWidth: 1
+                }
+
+            ]
+        },
+        options: {}
+    });
 
 }
