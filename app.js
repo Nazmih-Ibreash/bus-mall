@@ -6,7 +6,9 @@ let lastImgIndex = 0;
 
 
 let products = [];
-let arrIndex = [];
+let oldArrIndex = [];
+let newArrIndex = [];
+
 
 function FavProduct(name, imgPath) {
     this.name = name;
@@ -47,57 +49,75 @@ function genearateIndex() {
     return Math.floor(Math.random() * products.length);
 }
 
-// console.log(firstImgIndex);
-// console.log(secondImgIndex);
-// console.log(lastImgIndex);
-
 let firstDiv = document.getElementById("first");
 let secondDiv = document.getElementById("second");
 let lastDiv = document.getElementById("last");
 
-
 console.log(firstDiv);
 console.log(secondDiv);
 console.log(lastDiv);
-
-
-//firstDiv.src = products[firstImgIndex].imgPath;
-//let firstPic = firstDiv.appendchild('img');
 
 function generateRandomImgs() {
     firstImgIndex = genearateIndex();
     secondImgIndex = genearateIndex();
     lastImgIndex = genearateIndex();
 
-    while (firstImgIndex === secondImgIndex || secondImgIndex === lastImgIndex || firstImgIndex === lastImgIndex) {
+    while (firstImgIndex === secondImgIndex || secondImgIndex === lastImgIndex || firstImgIndex === lastImgIndex ) {
         firstImgIndex = genearateIndex();
         secondImgIndex = genearateIndex();
         lastImgIndex = genearateIndex();
+    }
+    newArrIndex.push(firstImgIndex);
+    newArrIndex.push(secondImgIndex);
+    newArrIndex.push(lastImgIndex);
+
+    while (oldArrIndex.includes(newArrIndex[0]) || oldArrIndex.includes(newArrIndex[1]) || oldArrIndex.includes(newArrIndex[2])) {
+        newArrIndex.length = 0;
+        generateRandomImgs();
+        console.log('new in check ' + newArrIndex);
     }
 
     firstDiv.src = products[firstImgIndex].imgPath;
     secondDiv.src = products[secondImgIndex].imgPath;
     lastDiv.src = products[lastImgIndex].imgPath;
+
+    
+    //console.log('new in generate ' + newArrIndex);
+
 }
 
 generateRandomImgs();
-arrIndex.includes(firstImgIndex, secondImgIndex, lastImgIndex);
-
+oldArrIndex.push(firstImgIndex);
+oldArrIndex.push(secondImgIndex);
+oldArrIndex.push(lastImgIndex);
+console.log('old  ' + oldArrIndex);
+//console.log('new  '+ newArrIndex);
 let attempts = 25;
 let userClicks = 0;
+
+// function checkIndex() {
+//     while (oldArrIndex.includes(newArrIndex[0], newArrIndex[1], newArrIndex[2])) {
+//         newArrIndex.length = 0;
+//         generateRandomImgs();
+//         console.log('new in check ' + newArrIndex);
+//     }
+// }
 
 firstDiv.addEventListener('click', clickEvent);
 secondDiv.addEventListener('click', clickEvent);
 lastDiv.addEventListener('click', clickEvent);
 
 
+
 function clickEvent(event) {
     console.log(event.target.id);
+    console.log(newArrIndex);
 
-    while (arrIndex.includes(firstImgIndex, secondImgIndex, lastImgIndex)) {
-        generateRandomImgs();
-    }
-
+    // while (oldArrIndex.includes(newArrIndex[0]) || oldArrIndex.includes(newArrIndex[1]) || oldArrIndex.includes(newArrIndex[2])) {
+    //     newArrIndex.length = 0;
+    //     generateRandomImgs();
+    //     console.log('new in check ' + newArrIndex);
+    // }
     products[firstImgIndex].numOfTimesImgSeen++;
     products[secondImgIndex].numOfTimesImgSeen++;
     products[lastImgIndex].numOfTimesImgSeen++;
@@ -112,8 +132,12 @@ function clickEvent(event) {
         } else {
             products[lastImgIndex].numOfImgClicks++;
         }
-        arrIndex.length=0;
-        arrIndex.push(firstImgIndex, secondImgIndex, lastImgIndex);
+        oldArrIndex.length = 0;
+        //oldArrIndex=newArrIndex;
+        oldArrIndex.push(firstImgIndex);
+        oldArrIndex.push(secondImgIndex);
+        oldArrIndex.push(lastImgIndex);
+
         generateRandomImgs();
     }
     else {
@@ -133,6 +157,7 @@ function clickEvent(event) {
                 resultList.appendChild(listItems);
                 listItems.textContent = `${products[i].name} had ${products[i].numOfImgClicks} votes, and was seen ${products[i].numOfTimesImgSeen} times.`;
             }
+            resButton.removeEventListener('click', viewResults);
         }
         firstDiv.removeEventListener('click', clickEvent);
         secondDiv.removeEventListener('click', clickEvent);
