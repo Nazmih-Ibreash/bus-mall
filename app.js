@@ -85,48 +85,58 @@ function generateRandomImgs() {
         generateRandomImgs();
         console.log('new in check ' + newArrIndex);
     }
-
     firstDiv.src = products[firstImgIndex].imgPath;
     secondDiv.src = products[secondImgIndex].imgPath;
     lastDiv.src = products[lastImgIndex].imgPath;
-
-
-    //console.log('new in generate ' + newArrIndex);
-
 }
 
 generateRandomImgs();
+
 oldArrIndex.push(firstImgIndex);
 oldArrIndex.push(secondImgIndex);
 oldArrIndex.push(lastImgIndex);
 console.log('old  ' + oldArrIndex);
 //console.log('new  '+ newArrIndex);
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+////////LAB 13 LOCAL STORAGE ///////////////////////////////////////////////////////////////////////////////////////
+
+function storage() {
+    let stringOfProducts = JSON.stringify(products);
+    //console.log('stringOfProducts: ' + stringOfProducts);
+
+    localStorage.setItem('favProd', stringOfProducts);
+    //localStorage.setItem('favProd', stringOfProducts);
+}
+let stringToArrayData ;
+function getFromStorage() {
+    let data = localStorage.getItem('favProd');
+    //console.log('getFromStorage' + data);
+
+    stringToArrayData = JSON.parse(data);
+    //console.log('stringToArrayData' + stringToArrayData);
+
+    if (stringToArrayData !== null) {
+        products = stringToArrayData;
+    }
+
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let attempts = 25;
 let userClicks = 0;
-
-// function checkIndex() {
-//     while (oldArrIndex.includes(newArrIndex[0], newArrIndex[1], newArrIndex[2])) {
-//         newArrIndex.length = 0;
-//         generateRandomImgs();
-//         console.log('new in check ' + newArrIndex);
-//     }
-// }
 
 firstDiv.addEventListener('click', clickEvent);
 secondDiv.addEventListener('click', clickEvent);
 lastDiv.addEventListener('click', clickEvent);
 
-
-
 function clickEvent(event) {
     console.log(event.target.id);
     console.log(newArrIndex);
 
-    // while (oldArrIndex.includes(newArrIndex[0]) || oldArrIndex.includes(newArrIndex[1]) || oldArrIndex.includes(newArrIndex[2])) {
-    //     newArrIndex.length = 0;
-    //     generateRandomImgs();
-    //     console.log('new in check ' + newArrIndex);
-    // }
     products[firstImgIndex].numOfTimesImgSeen++;
     products[secondImgIndex].numOfTimesImgSeen++;
     products[lastImgIndex].numOfTimesImgSeen++;
@@ -150,6 +160,7 @@ function clickEvent(event) {
         generateRandomImgs();
     }
     else {
+        storage();
         let resSection = document.getElementById('getResults');
         let resButton = document.createElement('button');
         resButton.textContent = 'view results';
@@ -171,10 +182,14 @@ function clickEvent(event) {
         for (let i = 0; i < products.length; i++) {
             productsVotes.push(products[i].numOfImgClicks);
             productsSeen.push(products[i].numOfTimesImgSeen);
-
+            // localStorage.setItem('numOfImgClicks', (products[i].numOfImgClicks));
+            // // stringToArrayData[numOfImgClicks].push(products[i].numOfImgClicks);
+            // // stringToArrayData[numOfTimesImgSeen].push(products[i].numOfTimesImgSeen);
+            // console.log(localStorage);
         }
 
         chart();
+        console.log(products);
 
         firstDiv.removeEventListener('click', clickEvent);
         secondDiv.removeEventListener('click', clickEvent);
@@ -224,3 +239,5 @@ function chart() {
     });
 
 }
+
+getFromStorage();
